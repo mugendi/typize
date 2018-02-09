@@ -170,6 +170,7 @@ var tests = [
         }
     },
 
+
     {
         val: 'http://www.foo.com/abc/def?a=2&b=3',
         type: {
@@ -307,7 +308,48 @@ var tests = [
             data_type: 'string',
             string_type: 'color'
         }
-    }
+    },
+
+    {
+        val: 'pencil, PEN, ruler, blackboard',
+        type: {
+            data_type: 'string',
+            string_type: 'list'
+        }
+    },
+
+    {
+        val: 'pencil, pen, ruler, black board',
+        type: {
+            data_type: 'string',
+            string_type: 'list'
+        }
+    },
+
+    {
+        val: 'pencil, PEN, ruler, black-board',
+        type: {
+            data_type: 'string',
+            string_type: 'list'
+        }
+    },
+
+    {
+        val: 'pencil, PEN, ruler, blackBoard',
+        type: {
+            data_type: 'string',
+            string_type: 'list'
+        }
+    },
+
+    {
+        val: '<p>pencil, pen, ruler, black board</p>',
+        type: {
+            data_type: 'string',
+            string_type: 'markup'
+        }
+    },
+
 
 
 ];
@@ -320,24 +362,22 @@ tests.forEach(function (test, i) {
     var res = typize(test.val);
 
 
-    describe(util.format("Data type tests for %s", chalk.blue(test.val.toString())) , function () {
+    describe(util.format("Data type tests for %s", chalk.blue(test.val.toString())), function () {
 
-        it(util.format("It should be a %s",  test.type.data_type), function () {
+        it(util.format("It should be a %s", test.type.data_type), function () {
             assert.equal(res.type.data_type, test.type.data_type);
         });
 
-        if (test.type.string_type) {
 
-            describe(util.format("string_type = %s?",  test.type.string_type ), function () {
+        describe(util.format("string_type test", test.type.string_type), function () {
 
-                it(util.format("Yes, its string_type = %s", test.type.string_type ), function () {
+            it(util.format("It's string_type should be %s", test.type.string_type), function () {
 
-                    assert.equal(res.type.string_type, test.type.string_type, res);
-
-                })
+                assert.equal(res.type.string_type, test.type.string_type, res.type.string_type);
 
             })
-        }
+
+        })
 
     });
 

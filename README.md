@@ -90,6 +90,7 @@ String types include:
   - color
   - file
   - remote file
+  - markup
 
 ## Check out the tests
 Install dev dependencies & check out the various tests by running:

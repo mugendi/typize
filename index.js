@@ -97,16 +97,23 @@ var types = {
                     return null
                 }
 
-                let o, arr2;
+                let o, arr2,
+                    p = /^[\w]+\s*,\s*[\w]+/i;
 
-                if (/,/.test(value)) {
+                if (p.test(value)) {
                     var arr = value.split(',').map(v => type(v).type);
                     arr = Array.from(new Set(arr.map(a => a.data_type)));
+                    // console.log(arr);
                     return arr.length == 1 ? value : null;
                 }
 
                 return null;
 
+            },
+            markup : function (value) {
+              let p = /<([A-Z][A-Z0-9]*)\b[^>]*>(.*?)<\/\1>/i
+
+              return p.test(value) ? value : null;
             },
             color: function (value) {
                 let p = /(#(?:[0-9a-f]{2}){2,4}|(#[0-9a-f]{3})|(rgb|hsl)a?\((-?\d+%?[,\s]+){2,3}\s*[\d\.]+%?\))/i
@@ -130,7 +137,7 @@ var types = {
     },
     test_order = {
         data_types: ['undefined', 'infinity', 'integer', 'float', 'date_time', 'date', 'boolean', 'string'],
-        string_types: [ 'remote_file', 'file', 'url', 'email', 'color', 'emoji', 'list']
+        string_types: [ 'remote_file', 'file', 'url', 'email', 'color', 'emoji', 'list', 'markup']
     }
 
 
