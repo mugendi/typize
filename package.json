@@ -1,0 +1,24 @@
+{
+  "name": "typize",
+  "version": "0.0.1",
+  "description": "Dynamic type detection for Javascript",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "keywords": [
+    "dynamic",
+    "data",
+    "datatype",
+    "type",
+    "variable",
+    "detection",
+    "inferencing"
+  ],
+  "author": "Anthony Mugendi <ngurumugz@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "chalk": "^2.3.0",
+    "mocha": "^5.0.0"
+  }
+}
