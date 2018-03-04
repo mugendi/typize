@@ -28,6 +28,15 @@ var types = {
 
                 return ((value.length >= 6) && new Date(value) !== "Invalid Date") && !isNaN(new Date(value)) ? new Date(value) : null;
             },
+            range: function (value) {
+                var m = value.match(/([0-9]+)\-([0-9]+)/)
+                
+                if(!m){
+                    return null;
+                }
+
+                return m.slice(1,3).map(Number);
+            },
             boolean: function (value) {
                 if (value === true) {
                     return true;
@@ -79,11 +88,11 @@ var types = {
                     return null;
                 }
             },
-            string: function (value) {
+            text: function (value) {
                 return typeof value === 'string' ? value : null;
             }
         },
-        string_types: {
+        string_formats: {
             email: function (value) {
                 var p = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
                 return p.test(value) ? value : null;
@@ -101,10 +110,13 @@ var types = {
                     p = /^[\w]+\s*,\s*[\w]+/i;
 
                 if (p.test(value)) {
-                    var arr = value.split(',').map(v => type(v).type);
-                    arr = Array.from(new Set(arr.map(a => a.data_type)));
-                    // console.log(arr);
-                    return arr.length == 1 ? value : null;
+                    var arr = value.split(',');
+                    var types_arr =arr.map(v => type(v).schema);
+                    // console.log( arr );
+                    types_arr = Array.from(new Set(types_arr.map(a => a.type)));
+                    
+                    return arr
+                    return types_arr.length == 1 ? value : null;
                 }
 
                 return null;
@@ -127,7 +139,7 @@ var types = {
                 return p.test(value) ? value : null;
             },
             remote_file: function (value) {
-                return (types.string_types.url(value) && /\..{2,4}$/.test(value)) ? value : null
+                return (types.string_formats.url(value) && /\..{2,4}$/.test(value)) ? value : null
             },
             file: function (value) {
                 var p = /\.[a-z0-9]{2,4}$/i;
@@ -136,8 +148,8 @@ var types = {
         }
     },
     test_order = {
-        data_types: ['undefined', 'infinity', 'integer', 'float', 'date_time', 'date', 'boolean', 'string'],
-        string_types: [ 'remote_file', 'file', 'url', 'email', 'color', 'emoji', 'list', 'markup']
+        data_types: ['undefined', 'infinity', 'integer', 'float', 'date_time', 'date', 'boolean', 'range', 'text'],
+        string_formats: [ 'email', 'remote_file', 'file', 'url',  'color', 'emoji', 'list', 'markup']
     }
 
 
@@ -164,8 +176,8 @@ function type(value) {
                     original: value,
                     inferred: v
                 },
-                type: {
-                    data_type: t
+                schema: {
+                    type: t
                 }
             }
             break;
@@ -179,7 +191,7 @@ function type(value) {
                 original: value.toString(),
                 inferred: null
             },
-            type: 'string'
+            type: 'text'
         }
     }
 
@@ -195,19 +207,26 @@ function string_type(value, typeObj) {
     let f, t, v;
 
 
-    for (var i in test_order.string_types) {
+    for (var i in test_order.string_formats) {
 
-        t = test_order.string_types[i];
-        f = types.string_types[t];
+        t = test_order.string_formats[i];
+        f = types.string_formats[t];
         v = get(f, value);
 
         if (v !== null) {
-            typeObj.type['string_type'] = t;
+            typeObj.value.inferred = v;
+            typeObj.schema['format'] = t;
             break;
         }
 
     }
 
+    //always return string where format is set...
+    if(typeObj.schema.hasOwnProperty('format')){
+        typeObj.schema.type = 'text';
+    }
+    
+    // console.log(typeObj);
     return typeObj;
 }
 

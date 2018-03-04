@@ -41,9 +41,9 @@ This will output:
         "original": "http://www.ietf.org/rfc/rfc2732.txt",
         "inferred": "http://www.ietf.org/rfc/rfc2732.txt"
     },
-    "type": {
-        "data_type": "string",
-        "string_type": "remote_file"
+    "schema": {
+        "type": "text",
+        "format": "remote_file"
     }
 }
 {
@@ -51,9 +51,9 @@ This will output:
         "original": "💯",
         "inferred": "💯"
     },
-    "type": {
-        "data_type": "string",
-        "string_type": "emoji"
+    "schema": {
+        "type": "text",
+        "format": "emoji"
     }
 }
 {
@@ -61,8 +61,8 @@ This will output:
         "original": "2018-02-09T20:21:05.295Z",
         "inferred": "2018-02-09T20:21:05.295Z"
     },
-    "type": {
-        "data_type": "date"
+    "schema": {
+        "type": "date"
     }
 }
 {
@@ -70,8 +70,8 @@ This will output:
         "original": "2015-1-11 13:57:24",
         "inferred": "2015-01-11T10:57:24.000Z"
     },
-    "type": {
-        "data_type": "date_time"
+    "schema": {
+        "type": "date_time"
     }
 }                                                                  
 ```
@@ -81,15 +81,15 @@ First, I wrote this module for a project I was working on to be able to detect d
 
 So I added two properties: 
 - **value.inferred** : This property holds the value of the data as converted to the inferred datatype. For example, a value of *"1"* will be inferred to as an *"integer"* datatype and thus *"value.inferred"* will be the numeral 1.
-- **type.string_type** : This value indicates whether any more detailed data-types can be inferred from strings. The example above tells us that *"http://www.ietf.org/rfc/rfc2732.txt"* is not only a string but also a "*remote_file*". 
-String types include:
+- **schema.format** : This value indicates whether any more detailed data-types can be inferred from strings. The example above tells us that *"http://www.ietf.org/rfc/rfc2732.txt"* is not only a string but also a "*remote_file*". 
+Formats include:
   - emoji
   - email
   - url
   - list (for comma delimited values such as "man,woman,child")
   - color
   - file
-  - remote file
+  - remote_file
   - markup
 
 ## Check out the tests

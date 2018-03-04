@@ -1,6 +1,6 @@
 {
   "name": "typize",
-  "version": "0.0.3",
+  "version": "1.0.0",
   "description": "Dynamic type detection for Javascript",
   "main": "index.js",
   "scripts": {
